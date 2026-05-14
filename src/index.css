@@ -1,0 +1,154 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 40 30% 97%;
+    --foreground: 150 25% 12%;
+
+    --card: 40 25% 95%;
+    --card-foreground: 150 25% 12%;
+
+    --popover: 40 30% 97%;
+    --popover-foreground: 150 25% 12%;
+
+    --primary: 152 45% 38%;
+    --primary-foreground: 40 30% 97%;
+
+    --secondary: 38 55% 55%;
+    --secondary-foreground: 40 30% 97%;
+
+    --muted: 40 20% 92%;
+    --muted-foreground: 150 10% 45%;
+
+    --accent: 152 30% 90%;
+    --accent-foreground: 152 45% 25%;
+
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 40 30% 97%;
+
+    --border: 40 15% 88%;
+    --input: 40 15% 88%;
+    --ring: 152 45% 38%;
+
+    --radius: 0.75rem;
+
+    --sidebar-background: 150 20% 15%;
+    --sidebar-foreground: 40 20% 92%;
+    --sidebar-primary: 152 45% 50%;
+    --sidebar-primary-foreground: 40 30% 97%;
+    --sidebar-accent: 150 15% 22%;
+    --sidebar-accent-foreground: 40 20% 92%;
+    --sidebar-border: 150 12% 25%;
+    --sidebar-ring: 152 45% 50%;
+
+    /* Custom tokens */
+    --success: 152 55% 42%;
+    --warning: 38 80% 50%;
+    --info: 210 60% 50%;
+    --earth: 25 35% 30%;
+    --harvest: 45 70% 55%;
+    --sky: 200 60% 55%;
+
+    --gradient-hero: linear-gradient(135deg, hsl(152 45% 38%), hsl(152 55% 28%));
+    --gradient-warm: linear-gradient(135deg, hsl(38 55% 55%), hsl(25 45% 45%));
+    --gradient-sky: linear-gradient(135deg, hsl(200 60% 55%), hsl(210 60% 45%));
+
+    --shadow-card: 0 4px 24px -4px hsl(150 25% 12% / 0.08);
+    --shadow-elevated: 0 12px 40px -8px hsl(150 25% 12% / 0.12);
+
+    --font-display: 'Space Grotesk', sans-serif;
+    --font-body: 'Inter', sans-serif;
+  }
+
+  .dark {
+    --background: 150 20% 8%;
+    --foreground: 40 20% 92%;
+    --card: 150 18% 12%;
+    --card-foreground: 40 20% 92%;
+    --popover: 150 18% 12%;
+    --popover-foreground: 40 20% 92%;
+    --primary: 152 50% 50%;
+    --primary-foreground: 150 20% 8%;
+    --secondary: 38 50% 50%;
+    --secondary-foreground: 150 20% 8%;
+    --muted: 150 15% 18%;
+    --muted-foreground: 40 15% 60%;
+    --accent: 152 25% 20%;
+    --accent-foreground: 152 50% 70%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 40 20% 92%;
+    --border: 150 12% 22%;
+    --input: 150 12% 22%;
+    --ring: 152 50% 50%;
+    --sidebar-background: 150 20% 6%;
+    --sidebar-foreground: 40 20% 92%;
+    --sidebar-primary: 152 50% 50%;
+    --sidebar-primary-foreground: 150 20% 8%;
+    --sidebar-accent: 150 15% 14%;
+    --sidebar-accent-foreground: 40 20% 92%;
+    --sidebar-border: 150 12% 18%;
+    --sidebar-ring: 152 50% 50%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family: var(--font-body);
+  }
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
+  }
+}
+
+@layer utilities {
+  .gradient-hero {
+    background: var(--gradient-hero);
+  }
+  .gradient-warm {
+    background: var(--gradient-warm);
+  }
+  .gradient-sky {
+    background: var(--gradient-sky);
+  }
+  .shadow-card {
+    box-shadow: var(--shadow-card);
+  }
+  .shadow-elevated {
+    box-shadow: var(--shadow-elevated);
+  }
+  .font-display {
+    font-family: var(--font-display);
+  }
+
+  /* Smooth scroll for all pages */
+  .overflow-y-auto {
+    scroll-behavior: smooth;
+  }
+
+  /* Selection color */
+  ::selection {
+    background-color: hsl(152 45% 38% / 0.2);
+  }
+
+  /* Focus ring style */
+  *:focus-visible {
+    outline: 2px solid hsl(152 45% 38% / 0.5);
+    outline-offset: 2px;
+    border-radius: 8px;
+  }
+
+  /* Smooth transitions on all interactive elements */
+  a, button, input, select, textarea {
+    transition-property: color, background-color, border-color, box-shadow, transform;
+    transition-duration: 200ms;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  }
+}

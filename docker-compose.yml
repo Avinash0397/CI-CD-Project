@@ -1,0 +1,106 @@
+services:
+  # Infrastructure
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: sroa
+      POSTGRES_PASSWORD: sroa
+      POSTGRES_DB: sroa
+    ports:
+      - "5434:5432"
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+      - ./backend/db/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
+
+  redis:
+    image: redis:7
+    ports:
+      - "6380:6379"
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.5.3
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+
+  kafka:
+    image: confluentinc/cp-kafka:7.5.3
+    depends_on:
+      - zookeeper
+    ports:
+      - "29091:29091"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+
+  # Backend Services
+  auth-service:
+    build: ./backend/auth-service
+    env_file: ./backend/.env
+    ports:
+      - "8092:8000"
+
+  user-profile-service:
+    build: ./backend/user-profile-service
+    env_file: ./backend/.env
+    depends_on:
+      - postgres
+    ports:
+      - "8093:8000"
+
+  weather-service:
+    build: ./backend/weather-service
+    env_file: ./backend/.env
+    depends_on:
+      - redis
+    ports:
+      - "8094:8000"
+
+  market-service:
+    build: ./backend/market-service
+    env_file: ./backend/.env
+    depends_on:
+      - redis
+    ports:
+      - "8095:8000"
+
+  agent-service:
+    build: ./backend/agent-service
+    env_file: ./backend/.env
+    depends_on:
+      - kafka
+    ports:
+      - "8096:8000"
+
+  notification-service:
+    build: ./backend/notification-service
+    env_file: ./backend/.env
+    depends_on:
+      - kafka
+      - postgres
+    ports:
+      - "8097:8000"
+
+  # Frontend Service
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      - VITE_API_HOST=localhost
+    depends_on:
+      - auth-service
+      - user-profile-service
+      - weather-service
+      - market-service
+      - agent-service
+      - notification-service
+
+volumes:
+  pg_data:
