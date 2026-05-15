@@ -92,7 +92,7 @@ jobs:
     - name: Build and Push Docker image
       uses: docker/build-push-action@v6
       with:
-        context: .
+        context: ./Dockerfile
         push: true
         tags: avinash974/3tier-app2:latest
         file: ./Dockerfile
