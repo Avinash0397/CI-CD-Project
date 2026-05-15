@@ -27,10 +27,10 @@ jobs:
       runs-on: ubuntu-latest
       needs: build-and-deploy
       steps:
-      - name: Gitleaks Setup
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - name: Gitleaks Scan
         uses: gitleaks/gitleaks-action@v2
-      - name: Run Gitleaks Scan
-        run: gitleaks detect --source . --report-path gitleaks-report.json
   
   Trivy-scan:
       runs-on: ubuntu-latest
