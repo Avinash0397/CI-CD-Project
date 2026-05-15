@@ -86,7 +86,7 @@ jobs:
       - name: ZAP Full Scan
         uses: zaproxy/action-full-scan@v0.12.0
         with:
-          target: ${{ inputs.target_url }}
+          target: "http://18.175.138.38:8081"
           # Production Rule: Automated reporting and issue creation
           issue_title: "Security: DAST Scan Alerts - ${{ github.sha }}"
           artifact_name: "zap-report-html"
