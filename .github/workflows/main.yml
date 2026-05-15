@@ -101,5 +101,5 @@ jobs:
       with:
         context: .
         push: true
-        tags: avinash974/3tier-app:latest
+        tags: avinash974/3tier-app2:latest
         file: ./Dockerfile
