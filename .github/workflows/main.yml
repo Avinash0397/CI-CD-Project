@@ -55,9 +55,20 @@ jobs:
 
       - name: Install Trivy
         run: curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin
-  Snyk:
+  Shellcheck:
     runs-on: ubuntu-latest
     needs: Trivy-scan
+    steps:
+      - uses: actions/checkout@v4
+      - name: ShellCheck Scripts Validation
+        uses: ludeeus/action-shellcheck@master
+        with:
+          # Production Rule: Sirf apni scripts scan karo, node_modules ko ignore karo
+          scandir: './'
+          ignore_paths: 'node_modules'
+  Snyk:
+    runs-on: ubuntu-latest
+    needs: Shellcheck
     continue-on-error: true # Added here because caller workflow doesn't support it with 'uses'
     steps:
       - uses: actions/checkout@v4
