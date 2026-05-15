@@ -65,28 +65,26 @@ jobs:
         uses: snyk/actions/python-3.10@master
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}      
-  SonarQube-scan:
-      runs-on: ubuntu-latest
-      needs: Trivy-scan
-      steps:
-      - name: Checkout code
-        uses: actions/checkout@v4  
-      - name: SonarQube Scan
-        run: |
-          mvn clean verify sonar:sonar \
-          -DskipTests \
-          -Dsonar.projectKey=votezy \
-          -Dsonar.host.url=http://54.176.130.119:9000 \
-          -Dsonar.token=${{ secrets.SONAR_TOKEN }}
+  Zap_scan:
+    runs-on: ubuntu-latest
+    needs: Snyk
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
 
-      - name: Log in to Docker Hub
-        env:
-          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-        run: |
-          echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-      - name: Pull OWASP ZAP Docker image
-        run: docker pull ictu/zap2docker-weekly
+      - name: ZAP Full Scan
+        uses: zaproxy/action-full-scan@v0.12.0
+        with:
+          target: ${{ inputs.target_url }}
+          # Production Rule: Automated reporting and issue creation
+          issue_title: "Security: DAST Scan Alerts - ${{ github.sha }}"
+          artifact_name: "zap-report-html"
+
+      - name: Upload Scan Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: "zap-scan-results-${{ github.run_id }}"
+          path: 'zap_report.html'
 
       - name: Start OWASP ZAP scan
         run: |
