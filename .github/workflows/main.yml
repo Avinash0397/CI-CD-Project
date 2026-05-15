@@ -35,7 +35,7 @@ jobs:
         password: ${{ secrets.DOCKER_PASSWORD }}
     - name: Build Docker Image
       run: |
-        docker build -t avinash974/3tier-app:${{ github.sha }} -f Dockerfile .
+        docker build -t avinash974/3tier-app:${{ github.sha }} .
 
     - name: Push to DockerHub
       run: |
